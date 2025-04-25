@@ -1,13 +1,13 @@
-package com.algaworks.algasensors.device.menagement;
+package com.algaworks.algasensors.device.management;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DeviceMenagementApplication {
+public class DeviceManagementApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DeviceMenagementApplication.class, args);
+		SpringApplication.run(DeviceManagementApplication.class, args);
 	}
 
 }
