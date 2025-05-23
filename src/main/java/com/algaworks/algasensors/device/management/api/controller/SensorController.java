@@ -16,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/sensors")
 @RequiredArgsConstructor
@@ -52,5 +50,40 @@ public class SensorController {
     public ResponseEntity<SensorOutput> getOne(@PathVariable TSID sensorId){
         Sensor sensor = sensorRepository.findById(new SensorId(sensorId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return ResponseEntity.ok(new SensorOutput(sensor));
+    }
+
+    @PutMapping("{sensorId}")
+    public ResponseEntity<SensorOutput> updateSensor(@PathVariable TSID sensorId, @RequestBody SensorInput input){
+        Sensor sensor = sensorRepository.findById(new SensorId(sensorId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        sensor.setIp(input.getIp());
+        sensor.setName(input.getName());
+        sensor.setModel(input.getModel());
+        sensor.setLocation(input.getLocation());
+        sensor.setProtocol(input.getProtocol());
+        sensorRepository.saveAndFlush(sensor);
+        return ResponseEntity.ok(new SensorOutput(sensor));
+    }
+
+    @PutMapping("{sensorId}/enable")
+    public ResponseEntity<SensorOutput> enableSensor(@PathVariable TSID sensorId){
+        Sensor sensor = sensorRepository.findById(new SensorId(sensorId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        sensor.setEnabled(Boolean.TRUE);
+        sensorRepository.saveAndFlush(sensor);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("{sensorId}/enable")
+    public ResponseEntity<SensorOutput> disableSensor(@PathVariable TSID sensorId){
+        Sensor sensor = sensorRepository.findById(new SensorId(sensorId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        sensor.setEnabled(Boolean.FALSE);
+        sensorRepository.saveAndFlush(sensor);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("{sensorId}")
+    public ResponseEntity<SensorOutput> deleteSensors(@PathVariable TSID sensorId){
+        Sensor sensor = sensorRepository.findById(new SensorId(sensorId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        sensorRepository.delete(sensor);
+        return ResponseEntity.noContent().build();
     }
 }
