@@ -1,5 +1,6 @@
 package com.algaworks.algasensors.device.management.api.controller;
 
+import com.algaworks.algasensors.device.management.api.client.SensorMonitoringClient;
 import com.algaworks.algasensors.device.management.api.model.SensorInput;
 import com.algaworks.algasensors.device.management.api.model.SensorOutput;
 import com.algaworks.algasensors.device.management.common.IdGenerator;
@@ -22,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class SensorController {
 
     private final SensorRepository sensorRepository;
+    private final SensorMonitoringClient sensorMonitoringClient;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -69,6 +71,7 @@ public class SensorController {
         Sensor sensor = sensorRepository.findById(new SensorId(sensorId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         sensor.setEnabled(Boolean.TRUE);
         sensorRepository.saveAndFlush(sensor);
+        sensorMonitoringClient.enableMonitoring(sensorId);
         return ResponseEntity.noContent().build();
     }
 
@@ -77,12 +80,14 @@ public class SensorController {
         Sensor sensor = sensorRepository.findById(new SensorId(sensorId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         sensor.setEnabled(Boolean.FALSE);
         sensorRepository.saveAndFlush(sensor);
+        sensorMonitoringClient.disableMonitoring(sensorId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("{sensorId}")
     public ResponseEntity<SensorOutput> deleteSensors(@PathVariable TSID sensorId){
         Sensor sensor = sensorRepository.findById(new SensorId(sensorId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        sensorMonitoringClient.disableMonitoring(sensorId);
         sensorRepository.delete(sensor);
         return ResponseEntity.noContent().build();
     }
