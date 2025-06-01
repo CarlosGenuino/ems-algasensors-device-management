@@ -13,7 +13,7 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class RestClientFactory {
 
-    private RestClient.Builder builder;
+    private final RestClient.Builder builder;
 
     public RestClient temperatureMonitoringRestClient() {
         return builder.baseUrl("http://localhost:8082")
