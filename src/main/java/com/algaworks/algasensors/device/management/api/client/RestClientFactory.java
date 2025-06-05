@@ -24,6 +24,15 @@ public class RestClientFactory {
                 .build();
     }
 
+    public RestClient viaCepRestClient(){
+        return builder.baseUrl("https://viacep.com.br")
+                .requestFactory(generateClientHttpRequestFactory())
+                .defaultStatusHandler(HttpStatusCode::isError,(request, response) -> {
+                    throw new SensorMonitoringClientBadGatewayException();
+                })
+                .build();
+    }
+
     private ClientHttpRequestFactory generateClientHttpRequestFactory() {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setReadTimeout(Duration.ofSeconds(5));

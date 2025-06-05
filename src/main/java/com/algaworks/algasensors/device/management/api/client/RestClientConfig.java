@@ -16,4 +16,12 @@ public class RestClientConfig {
         HttpServiceProxyFactory proxyFactory = HttpServiceProxyFactory.builderFor(restClientAdapter).build();
         return proxyFactory.createClient(SensorMonitoringClient.class);
     }
+
+    @Bean
+    public ViaCepClient viaCepClient(RestClientFactory factory){
+        RestClient restClient = factory.viaCepRestClient();
+        RestClientAdapter adapter = RestClientAdapter.create(restClient);
+        HttpServiceProxyFactory proxyFactory = HttpServiceProxyFactory.builderFor(adapter).build();
+        return proxyFactory.createClient(ViaCepClient.class);
+    }
 }
