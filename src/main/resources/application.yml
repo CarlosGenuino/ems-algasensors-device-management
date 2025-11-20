@@ -19,6 +19,14 @@ spring:
       ddl-auto: update
     show-sql: 'true'
 
+# OAuth2 Client Credentials Configuration
+oauth2:
+  client:
+    token-uri: ${OAUTH2_TOKEN_URI:your-token-uri}
+    client-id: ${OAUTH2_CLIENT_ID:your-client-id}
+    client-secret: ${OAUTH2_CLIENT_SECRET:your-client-secret}
+    grant-type: client_credentials
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

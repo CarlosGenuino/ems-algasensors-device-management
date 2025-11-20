@@ -1,6 +1,5 @@
 package com.algaworks.algasensors.device.management.api.config.web;
 
-
 import com.algaworks.algasensors.device.management.api.client.SensorMonitoringClientBadGatewayException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -13,6 +12,7 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.nio.channels.ClosedChannelException;
+import java.util.Objects;
 
 @RestControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -27,7 +27,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         problemDetail.setTitle("Gateway timeout");
         problemDetail.setDetail(e.getMessage());
-        problemDetail.setType(URI.create("/errors/gateway-timeout"));
+        problemDetail.setType(Objects.requireNonNull(URI.create("/errors/gateway-timeout")));
 
         return problemDetail;
     }
@@ -38,7 +38,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         problemDetail.setTitle("Bad gateway");
         problemDetail.setDetail(e.getMessage());
-        problemDetail.setType(URI.create("/errors/bad-gateway"));
+        problemDetail.setType(Objects.requireNonNull(URI.create("/errors/bad-gateway")));
 
         return problemDetail;
     }

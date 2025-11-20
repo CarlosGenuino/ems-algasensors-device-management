@@ -10,24 +10,21 @@ import org.springframework.web.client.RestClient;
 import java.time.Duration;
 
 @Component
-@RequiredArgsConstructor
-public class RestClientFactory {
-
-    private final RestClient.Builder builder;
+public record RestClientFactory(RestClient.Builder builder) {
 
     public RestClient temperatureMonitoringRestClient() {
         return builder.baseUrl("http://localhost:8082")
                 .requestFactory(generateClientHttpRequestFactory())
-                .defaultStatusHandler(HttpStatusCode::isError,(request, response) -> {
+                .defaultStatusHandler(HttpStatusCode::isError, (request, response) -> {
                     throw new SensorMonitoringClientBadGatewayException();
                 })
                 .build();
     }
 
-    public RestClient viaCepRestClient(){
+    public RestClient viaCepRestClient() {
         return builder.baseUrl("https://viacep.com.br")
                 .requestFactory(generateClientHttpRequestFactory())
-                .defaultStatusHandler(HttpStatusCode::isError,(request, response) -> {
+                .defaultStatusHandler(HttpStatusCode::isError, (request, response) -> {
                     throw new SensorMonitoringClientBadGatewayException();
                 })
                 .build();
